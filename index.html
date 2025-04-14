@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Anonbook</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 60%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      color: #333;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .posts-container {
+      margin-top: 20px;
+    }
+
+    .post {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .post img {
+      max-width: 200px;
+      margin-top: 10px;
+      border-radius: 4px;
+    }
+
+    .post a {
+      display: inline-block;
+      margin-top: 10px;
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 1em;
+    }
+
+    .post a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Create a New Post</h1>
+    <form action="/post" method="post" enctype="multipart/form-data">
+        <textarea name="content" required placeholder="What's on your mind?"></textarea><br>
+        <input type="file" name="photo" accept=".jpg"><br>
+        <button type="submit">Post</button>
+    </form>
+
+    <h2>All Posts</h2>
+    <div id="posts" class="posts-container"></div>
+</div>
+
+<script>
+    fetch("/post").then(r => r.json()).then(posts => {
+      const div = document.getElementById("posts");
+      posts.forEach(p => {
+        const postDiv = document.createElement("div");
+        postDiv.classList.add("post");
+        postDiv.innerHTML = `
+          <p>${p.content}</p>
+          ${p.photoPath ? `<img src="${p.photoPath}" alt="Post Image">` : ""}
+          <a href="post.html?postId=${p.id}">View Post</a>
+        `;
+        div.appendChild(postDiv);
+      });
+    });
+  </script>
+
+</body>
+</html>
